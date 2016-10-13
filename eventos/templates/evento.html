@@ -1,0 +1,145 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+<script>
+	var map;
+	var directionsDisplay; // Instanciaremos ele mais tarde, que será o nosso google.maps.DirectionsRenderer
+	var directionsService = new google.maps.DirectionsService();
+	id = {{evento.id}};
+	 
+	function initialize() {
+	   directionsDisplay = new google.maps.DirectionsRenderer(); // Instanciando...
+	   var latlng = new google.maps.LatLng(-18.8800397, -47.05878999999999);
+	 
+	   var options = {
+	      zoom: 5,
+	      center: latlng,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	   };
+	 
+	   map = new google.maps.Map(document.getElementById("mapa"), options);
+	   directionsDisplay.setMap(map); // Relacionamos o directionsDisplay com o mapa desejado
+	}
+ 
+</script>
+<script src="{% static 'js/controllers/EventoCtrl.js' %}"></script>
+<div ng-controller="EventoCtrl">
+
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">Informações Gerais</div>
+		  		<div class="panel-body">
+		  			<div class="col-md-6">
+		  				<img src="/media/{{evento.imagem}}" class="img-responsive" height="300px">	
+		  			</div>
+		  			<div class="col-md-6">
+				  		<h1>{{evento.nome | upper}}</h1>
+				  		<p><spam class="glyphicon glyphicon-user"></spam> Organizado por : <a style="text-transform: capitalize;" href="xpto">{{evento.author}}</a></p>
+				   		<p><spam class="glyphicon glyphicon-time"></spam> A partir das : <b>{{evento.hora}}hrs</b></p>
+				   		<p><spam class="glyphicon glyphicon-calendar"></spam> Dia : <strong>{{evento.data}}</strong></p>
+				   		<p><spam class="glyphicon glyphicon-shopping-cart"></spam> Entrada :  <b>{{evento.valor}}R$</b> </p>
+				   		<p><spam class="glyphicon glyphicon-music"></spam> Musicas : <b>{{evento.estilos}} </b> </p>
+				   		<p><spam class="glyphicon glyphicon-pushpin"></spam> Local : <strong>{{evento.local}} </strong></p>
+				   		<p><spam class="glyphicon glyphicon-screenshot"></spam> Cidade : <strong> {{evento.cidade}} </strong></p>
+				   		<div class="alert alert-success" role="alert"><p> <spam class="glyphicon glyphicon-ok"></spam> Presenças Confirmadas : <strong> {{evento.num_participantes}} </strong></span></p></div>
+				   		<button  ng-class="isPresenca" class="btn btn-success" ng-click="confirmarPresenca()" ng-bind="textoPresenca"></button>
+		  			</div>
+		  		</div>
+		  		<div class="panel-footer">
+					<img src="{% static 'img/share.png' %}"
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+	  <div class="panel-heading">Localização <span class="glyphicon glyphicon-search"></span></div>
+	  <div class="panel-body">
+	    <div id="mapa" style="height: 300px; width: auto">/div>
+	  </div>
+	</div>
+
+
+	</div>
+	</div>
+
+	<div class="col-md-12">
+		<div class="panel panel-default">
+	  <div class="panel-heading">Eventos Relacionados <span class="glyphicon glyphicon-search"></span></div>
+	  <div class="panel-body">
+	    <div class="row">
+		  <div class="col-xs-6 col-md-3">
+		    <a href="#" class="thumbnail">
+		      <img src="http://4.bp.blogspot.com/--eFnTijZDYU/U0v6u45IFBI/AAAAAAAAAWc/L2G649TH-w0/s1600/10154742_499416013496515_1959963604_n.jpg" alt="">
+		    </a>
+		  </div>
+		  <div class="col-xs-6 col-md-3">
+		    <a href="#" class="thumbnail">
+		      <img src="http://laursa.com/wp-content/uploads/2013/05/Flyer-WoW-na-La-Ursa.jpg" alt="">
+		    </a>
+		  </div>
+		  <div class="col-xs-6 col-md-3">
+		    <a href="#" class="thumbnail">
+		      <img src="http://www.djlisabueno.com/images/stories//gallery/flyers/Lisa-bueno-Smirnoff-Life-Exchange.jpg" alt="">
+		    </a>
+		  </div>
+		  <div class="col-xs-6 col-md-3">
+		    <a href="#" class="thumbnail">
+		      <img src="http://www.diegonegrellos.com.br/site/images/stories/SETEMBRO/flyer%201.jpg" alt="">
+		    </a>
+		  </div>
+		  ...
+		</div>
+	  </div>
+	</div>
+	</div>  
+	<div class="col-md-12">
+		<div class="panel panel-default">
+	  <div class="panel-heading">Duvidas ? Pergunte <span class="glyphicon glyphicon-search"></span></div>
+	  <div class="panel-body">
+	 {% if user.is_authenticated %}
+	  {% verbatim %}  
+		<ul class="media-list" ng-repeat="comentario in coment">
+		  <li class="media">
+		    <div class="media-left">
+		      <a href="#">
+		        <img class="media-object" src="http://icons.iconarchive.com/icons/mahm0udwally/all-flat/64/User-icon.png" alt="...">
+		      </a>
+		    </div>
+		    <div class="media-body">
+		      <a href="#"><h4 class="media-heading">{{comentario.id_author}}</h4></a>
+		     	<p ng-bind="comentario.comentario"></p>
+		 	    <div class="media" ng-if="comentario.resposta != null">
+		 	    	<div class="media-left"><a href="#"><img src="http://www.iconesbr.net/iconesbr/2009/04/7743/7743_64x64.png"></a></div>
+		 	    	<div class="media-body">
+					<a href="#"><h4 class="media-heading">{{comentario.resposta.id_author}}</h4></a>
+		 	    	{{comentario.resposta.resposta}}</div>
+		 	    </div>
+		      <a ng-show="comentario.resposta == null" ng-click="mostrar($index,comentario.id)">Responder</a>
+		      <div id="comentario{{$index}}" ng-show="mostrarComentario[{{$index}}]" ng-class="mostrarComentario{{$index}}">
+		      	 <div ng-show="comentario.resposta == null">
+		      	 <textarea class="form-control" rows="5" id="comment" ng-model="comentariotext"></textarea>
+		      	 <button type="submit" class="btn btn-primary" ng-click="enviarRespostaComentario(comentario.id,comentariotext) ">Enviar</button>
+		      	 </div>
+		      </div>
+
+		    </div>	   
+		  </li>
+
+		</ul>
+		 <form method="POST" ng-submit="enviarComentario(comentario)">
+		   <div class="form-group">
+			  <label for="comment">Faça sua pergunta : </label>
+			  <textarea class="form-control" rows="5" id="comment" ng-model="comentario"></textarea>
+			</div>
+		  	<button type="submit"class="btn btn-primary " style="float: right" >Enviar</button>
+		</form>
+	</div>
+	{% endverbatim %}
+	{% else %}
+		<center><h1>É necessario estar logado para comentar !!</h1></center>
+	{%endif%}
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,85 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<script>
+	window.cidade = "{{cidade}}";
+</script>
+<script src="{% static 'js/controllers/TelaEventosCtrl.js' %}"></script>
+
+<div ng-controller="CtrlTelaEventos" >
+	<div id="logo" ng-if="eventos.length > 0">
+		<img id="logoimg" src="{% static 'img/logo2.png' %}">
+	</div>
+	<div id="event" ng-if="eventos.length > 0">
+		<ol class="breadcrumb">
+		  <li><a href="/">{{cidade}}</a></li>
+		  <li class="active">Eventos</li>
+		</ol>
+		<div class="well well-sm">
+		<div class="row">
+		
+		  <div class="col-lg-4">
+		  Selecione uma data : 
+		    <div class="input-group">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><span class=" glyphicon glyphicon-calendar"></span></button>
+		      </span>
+		      <input type="text" class="form-control" placeholder="Exemplo : 09/09/2016">
+		    </div><!-- /input-group -->
+		  </div><!-- /.col-lg-6 -->
+		  <div class="col-lg-4">
+		   Pesquise pelo nome : 
+		    <div class="input-group">
+		      <input type="text" class="form-control" placeholder="Exemplo : Piaui Fest Music">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+		      </span>
+		    </div><!-- /input-group -->
+		  </div><!-- /.col-lg-6 -->
+		  <div class="col-lg-4">
+		  	Escolha o estilo :
+		  	<div class="dropdown">
+			  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			    Tipos
+			    <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+			    <li><a href="#">Action</a></li>
+			    <li><a href="#">Another action</a></li>
+			    <li><a href="#">Something else here</a></li>
+			    <li role="separator" class="divider"></li>
+			    <li><a href="#">Separated link</a></li>
+			  </ul>
+			</div>
+		  </div>
+		  </div>
+		</div><!-- /.row -->
+	{% verbatim %}
+		<div id="lista_eventos" class="row">
+		  <div class="col-sm-6 col-md-4" ng-repeat="evento in eventos" ng-init="innerIndex = $index">
+		    <div class="thumbnail">
+		      <a href="/evento/{{evento.id}}/"><img src={{evento.imagem}} alt="..." class="animimg ot"></a>
+		      <div class="caption">
+		        <a href="/evento/{{evento.id}}/"><h3>{{evento.nome}}</h3></a>
+		        <p>
+				<p><spam class="glyphicon glyphicon-user"></spam> Organizado por : <a href="xpto">{{evento.author}}</a></p>
+		        <p><spam class="glyphicon glyphicon-time"></spam> A partir das : <b>{{evento.hora}}hrs</b></p>
+		        <p><spam class="glyphicon glyphicon-calendar"></spam> Dia : <b>{{evento.data}}</b></p>
+		        <div class="alert alert-success" role="alert"><b>237</b> Presenças <b>Confirmadas</b> <span class="glyphicon glyphicon-ok"></span></div>
+		        </p>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+</div>
+</div>
+{% endverbatim %}
+<div class="center-block" ng-if="eventos.length === 0" style="margin-left: 30%;margin-top:10%;color: white;">
+	<img src="http://www.youthvillage.org/images/404.png" class="img-responsive">
+	<h1 style="margin-left:-15%">Nenhum evento cadastrado para essa cidade :(</h1>
+	<h1 style="margin-left: -5%">{% if user.is_authenticated %}<a href="/evento/cadastrar/">crie um evento</a>{% else %} <a href="/registrar/">Registre-se</a> para criar um evento{% endif %}</h1>
+	
+</div>
+	
+{% endblock content %}

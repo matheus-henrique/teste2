@@ -1,0 +1,33 @@
+
+<div class="modal-header" class="modal hide fade" tabindex="-1" aria-hidden="true">
+    <img src="https://cdn2.iconfinder.com/data/icons/insurance-3/32/security-512.png" style="width: 40px; margin-left: 125px;">
+</div>
+<div class="modal-body" id="modal-body">
+	<form method="POST" ng-submit="logar()">
+		<h5 style="text-align: center;">Chegou agora ? <a href="/registrar/">Crie sua conta</a></h5>
+		<div class="input-group" ng-class="error">
+			  <span class="input-group-addon glyphicon glyphicon-user" id="basic-addon1"></span>
+			  <input type="text" class="form-control" placeholder="Usuario..." ng-model="user" name="user" aria-describedby="basic-addon1">
+		</div>
+		<br>
+		<div class="input-group" ng-class="error">
+			  <span class="input-group-addon glyphicon glyphicon-lock" id="basic-addon1"></span>
+			  <input type="password" class="form-control" id="inputError1" placeholder="Senha..." ng-model="pass" name="pass" aria-describedby="basic-addon1">
+		</div>
+		<br>
+		<button class="btn btn-danger form-control" type="submit">Entrar</button>
+	</form>
+	<h5 style="text-align: center;">OU</h5>
+	  <a class="btn btn-block btn-social btn-facebook">
+    	<span class="fa fa-facebook"></span> Entre com o facebook
+  	   </a>
+  	  <a class="btn btn-block btn-social btn-google">
+    	<span class="fa fa-google"></span> Entre com sua conta google
+  	   </a>
+</div>
+<div class="modal-footer">
+    <span class="glyphicon glyphicon-remove"></span>
+    <div class="modal-left">
+    	Esqueçeu sua senha ? <a href="/login">Clique aqui</a>
+    </div>
+</div>

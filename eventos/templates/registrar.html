@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<script src="{% static 'js/controllers/CtrlRegistrar.js' %}"></script>
+
+<div class="row" style="margin-left: 30%;" ng-controller="CtrlRegistrar">
+<div class="col-md-8">
+	<h1 style="color: white; margin-left: 60px;">Cadastro de Usuarios</h1>
+	<form style="margin-top: 9px;" method="POST" action="/register/">{% csrf_token %}
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span></span>
+		  <input type="text" name="username" class="form-control" placeholder="Digite um nome de usuario...." aria-describedby="basic-addon1" required="">
+		</div>
+		<div class="input-group" style="margin-top: 9px;">
+		  <span class="input-group-addon" id="basic-addon1">#</span>
+		  <input type="text" name="name" class="form-control" placeholder="Digite seu primeiro nome..." aria-describedby="basic-addon1" required="">
+		</div>
+		<div class="input-group" style="margin-top: 9px;">
+		  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"></span></span>
+		  <input type="password" name="password" class="form-control" placeholder="Digite sua senha..." aria-describedby="basic-addon1" required="">
+		</div>
+		<button style="margin-top: 9px;" type="submit" ng-enabled="userForm.$valid" ng-model="passconfirm" class="btn btn-primary form-control">Registrar</button>
+		
+	</form>
+</div>
+</div>
+
+
+{% endblock content %}

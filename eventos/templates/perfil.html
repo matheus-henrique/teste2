@@ -1,0 +1,79 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+<div ng-controller="CtrlPerfil">
+			<div id="capa" class="col-md-12" >
+				<img class="perfil img-circle" src="http://www.fanscup.com/assets/img/interface/empty_user.png">
+				<h1 class="nome-perfil">#{{user}}</h1>
+				<span class="nome-descricao">Teresina-Piauí</span>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-default">
+					  <div class="panel-body">
+					    <ul class="nav nav-pills" role="tablist">
+						  <li role="presentation" ng-class="menu[0]" ng-click="meusFavoritos()"><a href="#">Principais Eventos</a></li>
+						  <li role="presentation" ng-class="menu[1]"ng-click="meusEventos()"><a href="#">Meus Eventos<span class="badge" ng-bind="eventouserquant.length"></span></a></li>
+						  <li style="float:right;"role="presentation"><a href="/evento/cadastrar/" class="btn btn-danger">Criar um Evento</a></li>
+						</ul>
+					  </div>
+					</div>
+				</div>
+			</div>
+
+			{% verbatim %}  
+				<div class="row" ng-show="myForm.principals">
+					<div class="col-sm-6 col-md-4" ng-repeat="evento in even">
+					    <div class="thumbnail">
+					      <a href="/evento/{{evento.id}}/"><img src={{evento.imagem}} alt="..." class="animimg ot"></a>
+					      <div class="caption">
+						        <a style="text-transform: capitalize;" href=/evento/{{evento.id}}><h3>{{evento.nome}}</h3></a>
+								<p style="text-transform: capitalize;"><spam class="glyphicon glyphicon-user"></spam> Organizado por : <a href="xpto">{{evento.author}}</a></p>
+						        <p><spam class="glyphicon glyphicon-time"></spam> Hora : <b>{{evento.hora}}hrs</b></p>
+						        <p><spam class="glyphicon glyphicon-calendar"></spam> Dia : <b>{{evento.data}}</b></p>
+						        <div class="alert alert-success" role="alert"><b>237</b> Presenças <b>Confirmadas</b> <span class="glyphicon glyphicon-ok"></span></div>
+						        </p>
+					      </div> 
+					    </div> 
+					</div>
+				</div>
+			{% endverbatim %}
+
+
+				<div class="row" ng-show="myForm.myevents">
+					<div class="col-md-12" >
+					<div class="panel panel-default">
+					  <div class="panel-body">
+					   <div uib-alert class="alert alert-success" close="form.bCloseAlert=false" ng-show="form.bCloseAlert">Evento <strong>excluido</strong> com <strong>sucesso</strong>!!!</div>
+					    <table class="table table-hover table-inverse">
+						    <thead>
+						    	<tr>
+						    		<th>ID</th>
+						    		<th>Nome</th>
+						    		<th>Data</th>
+						    		<th>Status</th>
+						    		<th>Ações</th>
+						    	</tr>
+						    </thead>
+						    {% verbatim %}  
+						    <tbody ng-repeat="evtuser in eventouserquant">
+						    	<tr>
+						    		<th scope="1">{{evtuser.id}}</th>
+						    		<th>{{evtuser.nome}}</th>
+						    		<th>{{evtuser.data}}</th>
+						    		<th><span class="label label-success">Ativo</span></th>
+						    		<th><button class="btn btn-danger" ng-init="form.id = evtuser.id" ng-click="abrirConfirmacao(evtuser.id)">Excluir <span class="glyphicon glyphicon-remove"></span></button>
+						    		<button class="btn btn-primary">Editar <span class="glyphicon glyphicon-pencil"></span></button></th>
+						    	</tr>
+						    </tbody>
+						    {% endverbatim %}
+						  </table>
+					  </div>
+					</div>
+				</div>
+				</div>
+				
+				
+						  
+</div>
+{% endblock content %}

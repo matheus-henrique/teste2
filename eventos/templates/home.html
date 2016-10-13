@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}	
+<div ng-controller="CtrlHome">
+<script src="{% static 'js/controllers/HomeCtrl.js' %}"></script>
+	<div id="main" ng-class="status">
+		<img class="img-responsive" src="{% static 'img/logo2.png' %}">
+		
+		<div id="divBusca">
+		    <img src="img/search3.png" alt=""/>
+		    <input type="text" id="txtBusca"  placeholder="Digite o nome da sua cidade..." ng-model="evento.texto_busca" ng-keyup="buscar()"/>
+		   <!-- <img src="img/search4.png" alt="Buscar..." id="btnBusca"/> !-->
+		</div>
+		<div id="result" ng-show="ativo" ng-repeat="state in dados.estados">
+			<div id="res" ng-repeat="city in state.cidades | filter:evento.texto_busca | limitTo:2" ng-click="mostrarEventos(city)">
+				<a href="#" ><img src="http://publicdomainvectors.org/photos/location_icon.png" width="50px"></a>
+				<spam ng-bind="city"></spam>
+				<p ng-bind="(city) + '-'+ (state.sigla)"> </p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

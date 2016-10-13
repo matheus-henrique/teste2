@@ -1,0 +1,115 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="App">
+<head charset="UTF-8">
+	<meta charset="UTF-8">
+	<!-- FOLHA DE ESTILO -->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/angular-notification-icons.min.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-social.css' %}">
+	<link rel="stylesheet" type="text/css" href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css">
+
+
+	<!-- LIBRARY -->
+	<script src="{% static 'js/library/angular.min.js' %}"></script>
+	<script src="{% static 'js/library/angular-notification-icons.min.js' %}"></script>
+	<script src="{% static 'js/library/angular-animate.js' %}"></script>
+	<script src="{% static 'js/library/angular-cookies.js' %}"></script>
+	<script src="{% static 'js/library/angular-route.js' %}"></script>
+	<script src="{% static 'js/library/ui-bootstrap-tpls-2.1.3.min.js' %}"></script>
+	<script src="http://nervgh.github.io/pages/angular-file-upload/dist/angular-file-upload.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	<script src="{% static 'js/library/ng-file-upload.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/library/angular-sanitize.min.js' %}"></script>
+
+
+	<!-- FONT -->
+	<link rel="stylesheet" type="text/css" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+
+	<!-- APP -->
+	<script src="{% static 'js/main.js' %}"></script>	
+
+	<!-- CONFIG -->
+	<script src="{% static 'js/config/AppConfig.js' %}"></script>	
+	
+
+	<!-- CONTROLLERS -->
+	<script src="{% static 'js/controllers/CtrlPerfil.js' %}"></script>
+	<script src="{% static 'js/controllers/IndexCtrl.js' %}"></script>
+	
+	<title>Teste de pagina</title>
+</head>
+
+<body ng-controller="IndexCtrl" >
+	<script>
+    	window.csrf_token = "{{ csrf_token }}";
+    	window.user_id = "{{user.id}}";
+	</script>
+	<nav class="navbar navbar-default "> </nav> 
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="#">Oh Fluxo</a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a href="/">Inicio<span class="sr-only">(current)</span></a></li>
+	        
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	      {% if user.is_authenticated %}
+		      
+				 <li><a href="#">Bem vindo {{user.username}}</a></li>
+			  <div class="btn-group" uib-dropdown is-open="status.isopen" >
+			  	 <li><img class="espacamento" uib-dropdown-toggle src="http://www.fanscup.com/assets/img/interface/empty_user.png" width="30px"></li>
+			  	 <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+				    <li role="menuitem"><a href="/perfil/">Meus Eventos<span class="glyphicon glyphicon-th-large"></span></a></li>
+				    <li role="menuitem"><a href="/evento/cadastrar/">Criar Evento <span class="glyphicon glyphicon-heart"></span></a></li>
+				    <li class="divider"></li>
+				    <li role="menuitem"><a href="/logout/">Sair <span class="glyphicon glyphicon-log-out"></span></a></li>
+				  </ul>
+			  </div>
+			  <div class="btn-group" uib-dropdown is-open="status.xpto" ng-click="kaka()">   
+			 	 <li><notification-icon uib-dropdown-toggle animation="shake" clear-trigger="click" count="vm.alwaysShowCount">
+				  <img class="espacamento" sytle="left:10px"src="{% static 'img/notification.png' %}" width="30px">
+				</notification-icon></li>  
+				{% verbatim %}
+				<ul class="dropdown-menu" style="min-width: 360px !important"uib-dropdown-menu role="menu" aria-labelledby="single-button" style="overflow:hidden">
+						<li>Notificações({{quantNotifications}})</li>
+						<li ng-repeat-end class="divider"></li>
+						<li style="overflow: hidden;" ng-repeat-start="notification in notifications | orderBy:'-'" role="menuitem"><a href="#"><div><img align="left" src="/media/{{notification.img_link}}" class="img-circle" width="40px"></div>
+						 <p style="white-space: pre-wrap; word-wrap: break-word;" ng-bind-html="notification.texto"></p></a></li>
+						<li ng-repeat-end class="divider"></li>
+						<li><a href="#">Marcar todos como lido</a></li>
+				</ul>
+				{% endverbatim %}
+			</div>
+				 
+				
+		  {% else %} 
+	      	<li style="margin-top: 4px;"><button class="btn btn-danger" ng-click="abrirLogin()">Entrar</button></li>
+	     {% endif %}
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+	<div class="container">
+		{% block content %}
+		{% endblock %}
+	</div>
+
+</body>
+</html>

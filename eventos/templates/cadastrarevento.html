@@ -1,0 +1,203 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<script src="{% static 'js/controllers/CtrlCadastroEvento.js' %}"></script>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans+Caption:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{% static 'css/progress.css' %}">
+
+<div class="col-md-12">
+<ol class="progress progress--large" ng-show="!etapa.etapas[3]"> 
+	<li ng-class="estilomenu[0]"  data-step="1">Informações Basicas</li>
+	<li ng-class="estilomenu[1]"  data-step="2">Localização</li>
+	<li ng-class="estilomenu[2]"  data-step="3">Valores</li>
+	<li ng-class="estilomenu[3]"  data-step="4">Concluido</li>
+</ol>
+
+<div class="panel panel-default" ng-controller="CtrlCadastroEvento" ng-show="etapa.etapas[0]">
+	<div class="row-fluid">
+		<center><h1>CADASTRO DE EVENTOS <span class="glyphicon glyphicon-list-alt"></span></h1></center>
+		<div class="col-md-12">	
+		<div class="form-group">
+			 <label for="exampleInputEmail1">Nome do Evento : </label>
+			<input name="nome" class="form-control" ng-model="formData.nome" placeholder="Ex : Festa dos amigos, Piauí Fest..." required/>
+		</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="col-md-6" style="margin-top: 35px">
+			<label for="exampleInputEmail1">Data do Evento :  </label>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar"></span></span>
+		   <input type="text" class="form-control" name="data" ng-model="formData.data" placeholder="Ex 14/07/2017" aria-describedby="basic-addon1">
+		</div>
+	 
+		</div>
+		<div class="col-md-6">	
+				<label for="exampleInputEmail1">Hora do Inicio : </label>
+		<div uib-timepicker ng-model="formData.hora" name="hora" ng-change="changed()" hour-step="01" minute-step="01" show-meridian="ismeridian"></div>
+
+	</div>
+		<label style="margin-left: 15px; margin-top: 10px;">Imagem : </label>
+	<div class="row">
+		<div class="col-md-10" style="padding-left:290px;padding-top: 100px;border-width:4px;border-style: dashed;border-color: #E2E2E2;height: 250px; left: 100px">
+			<input type="file" ngf-select ng-model="formData.imagem" name="imagem" class="btn btn-danger">
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="col-md-offset-11" style="margin-top: 15px;">
+			<button class="btn btn-primary" ng-click="proximo(0,1)">Proximo <span class="glyphicon glyphicon-chevron-right"></span></button>
+		</div>
+	</div>
+	
+	
+</div>
+</div>
+
+
+<div class="col-md-12" ng-show="etapa.etapas[1]">
+	<div class="panel panel-default" ng-controller="CtrlCadastroEvento" ><!-- ETAPA 2 -->
+	<center><h1>CADASTRO DE EVENTOS <span class="glyphicon glyphicon-list-alt"></span></h1></center>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					 <label for="exampleInputEmail1">Cidade  do evento :</label>
+					 <div ng-show="selecionado">
+					 	<span class="label label-default" ng-bind="formData.cidade"></span>
+					 	</div>
+						<div id="divBusca" ng-hide="selecionado"style="border: 1px solid #ccc !important">
+						    <img src="img/search3.png" alt=""/>
+						    <input type="text" id="txtBusca"  placeholder="Digite o nome da sua cidade..." ng-model="formData.cidade" ng-keyup="buscar()"/>
+						   <!-- <img src="img/search4.png" alt="Buscar..." id="btnBusca"/> !-->
+						</div>
+						<div id="result" ng-show="ativo" ng-repeat="state in dados.estados">
+							<div id="res" style="border: 1px solid black !important" ng-repeat="city in state.cidades | filter:formData.cidade | limitTo:5	" ng-click="mostrar(city)">
+								<a href="#" ><img src="http://publicdomainvectors.org/photos/location_icon.png" width="50px"></a>
+								<spam ng-bind="city"></spam>
+								<p ng-bind="(city) + '-'+ (state.sigla)"> </p>
+							</div>
+						</div>
+										
+					</select>
+
+					<h1 ng-bind="$index"></h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					 <label for="exampleInputEmail1">Local do evento :  </label>
+					<input name="local" class="form-control" ng-model="formData.local" placeholder="Ex : Teresina Hall, Kangaço..." required/>
+				</div>
+			</div>
+			<div class="col-md-6" style="margin-top: 20px">
+				<div class="checkbox">
+				  <label><input type="checkbox" checked="false" ng-model="localizar">Ativar Localização</label>
+				</div>
+			</div>
+		</div>
+		<div id="localizacao" ng-show="localizar">
+			<div class="row">
+				<div class="col-md-7">
+				<div class="alert alert-info" role="alert" style="margin-left: 10px;">
+					<p>Para que a localização funcione de forma <strong>correta</strong> é necessario a <strong>latitude</strong> e
+				 	<strong>longitude</strong> do <strong>local do evento</strong>: Os dados podem ser facilmente encontrados no <a href="https://www.google.com.br/maps">Google Maps</a>.</p>
+				 </div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group" style="margin-left: 10px">
+						 <label for="exampleInputEmail1">Latitude : </label>
+		    			<input name="latitude" class="form-control" ng-model="formData.latitude" placeholder="Ex : 40.7143528">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group" style="margin-left: 10px">
+						 <label for="exampleInputEmail1">Longitude : </label>
+		    			<input name="longitude" class="form-control" ng-model="formData.longitude" placeholder="Ex : 40.7143528">
+					</div>
+				</div>
+			</div>
+		</div>
+			<div class="row-fluid">
+				<div class="col-md-offset-11">
+					<button class="btn btn-primary" ng-click="proximo(1,2)">Proximo <span class="glyphicon glyphicon-chevron-right"></span></button>
+				</div>
+			</div>
+	</div>
+</div>
+
+<div class="col-md-12" ng-show="etapa.etapas[2]" ng-controller="CtrlCadastroEvento">
+	<div class="panel panel-default"> <!-- ETAPA3 -->
+	<center><h1>CADASTRO DE EVENTOS <span class="glyphicon glyphicon-list-alt"></span></h1></center>
+		<div class="row">
+			<div class="col-md-6">
+			<label for="exampleInputEmail1">Informe o valor da entrada : </label>
+				<div class="input-group">
+				  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-usd"></span></span>
+				  <input type="text" name="valor" class="form-control" ng-model="formData.valor" placeholder="Ex 15.00" aria-describedby="basic-addon1" ng-disabled="entrada">
+				</div>
+			</div>
+			<div class="col-md-6" style="margin-top: 20px">
+				<div class="checkbox">
+				  <label><input type="checkbox" checked="false" ng-model="entrada">Entrada Gratuita</label>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-10">
+				<label for="exampleInputEmail1">Informe o(os) estilos musicias : </label><small>(Separe por virgula se for mais de um)</small>
+				<div class="input-group">
+				  <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-music"></span></span>
+				  <input type="text" name="estilos" class="form-control" ng-model="formData.estilos" placeholder="Ex : Forro, Sertanejo, Rock..." aria-describedby="basic-addon1">
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-md-12">
+				 <div class="form-group">
+				  <label for="comment">Informações Adicionais : </label>
+				  <textarea name="descricao" class="form-control" ng-model="formData.descricao" rows="5" id="comment"></textarea>
+				</div>
+			</div>
+		</div>
+	
+
+		<div class="row-fluid">
+				<div class="col-md-offset-11">
+					<button class="btn btn-primary" ng-click="cadastrarEvento(); proximo(2,3)">Proximo <span class="glyphicon glyphicon-chevron-right"></span></button>
+				</div>
+		</div>
+
+	</div>
+</div>
+
+{% verbatim %}
+<div style="margin-top: 20%;" ng-show="etapa.etapas[3]">
+		<h1 style="text-align: center; color:#ffffff !important;" ng-hide="sucesso" >{{andamento}}<span class="glyphicon glyphicon-time"></span></h1>
+
+		<uib-progressbar class="progress-striped active" value="dinamic" type="warning">{{dinamic}}%</uib-progressbar>
+		<div id="success" ng-show="sucesso">
+		<h1 style="text-align: center; color:#ffffff !important;">EVENTO CRIADO COM SUCESSO <span class="glyphicon glyphicon-ok"></span></h1>
+		<div class="row" style="margin-left: -160px;">
+			<div class="col-md-6">
+			</div>
+			<div class="col-md-3">
+				<a class="btn btn-warning" href="/evento/{{result.id}}/"style="margin-left:-50px">Clique aqui para visualizar</a>
+			</div>
+		</div>
+		</div>
+</div>
+{% endverbatim %}
+
+</div>
+
+
+{% endblock content %}
