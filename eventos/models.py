@@ -4,14 +4,15 @@ from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 from datetime import datetime
-
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 class Eventos(models.Model):
 	nome = models.CharField(max_length=100)
 	descricao = models.TextField()
 	local = models.CharField(max_length=100)
-	latitude = models.CharField(max_length=100, blank=True, null=True)
-	longitude = models.CharField(max_length=100, blank=True, null=True)
+	latitude = models.CharField(max_length=100, blank=True, null=True, validators=[RegexValidator(regex="^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$")])
+	longitude = models.CharField(max_length=100, blank=True, null=True, validators=[RegexValidator(regex="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$")])
 	cidade = models.CharField(max_length=100)
 	author = models.ForeignKey('auth.User')
 	valor = models.CharField(max_length=5, blank=True, null=True)
