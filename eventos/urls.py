@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^registrar/$',views.registrar),
     url(r'^register/$',views.register),
     url(r'^notifications/(?P<pk>[0-9]+)/$',views.NotificationsView.as_view()),
-    url(r'^evento/confirmarpresenca/(?P<pk>[0-9]+)/$',views.ConfirmarPresença.as_view())
+    url(r'^evento/confirmarpresenca/(?P<pk>[0-9]+)/$',views.ConfirmarPresença.as_view()),
+    url("^soc/", include("social.apps.django_app.urls", namespace="social"))
 ]

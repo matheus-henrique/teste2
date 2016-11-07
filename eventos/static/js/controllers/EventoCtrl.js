@@ -42,6 +42,7 @@ app.controller('EventoCtrl',function($scope,$http,$window,$rootScope){
 
 	$scope.enviarComentario = function(comentario){
 		$http.defaults.headers.post['X-CSRFToken'] = window.csrf_token;
+		alert($scope.responseKey);
 		$http.post("/eventos/comentarios/"+$window.id+"/",{"comentario":comentario}).success(function(data){
 			$scope.comentarios = $http.get("/eventos/comentarios/"+$window.id).success(function(data){
 				$scope.coment = data;

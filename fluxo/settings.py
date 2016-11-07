@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'eventos',
+    'social.apps.django_app.default',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -55,6 +56,14 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'fluxo.urls'
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '431430123590-rqrqn98ech31sd3ip62sot9nt4646smq.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'AKM0WxcF-TwtwCDMNXnToYiF'
 
 TEMPLATES = [
     {
@@ -73,6 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'fluxo.wsgi.application'
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LeY3AkUAAAAAGcH-N7OHHf3kmg3bWnnWUpnOX3t'
 
 
 # Database

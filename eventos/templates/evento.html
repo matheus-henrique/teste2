@@ -65,6 +65,10 @@
 	}
  
 </script>
+<script
+  src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
+  async defer
+></script>
 <head>
 	<title>{{evento.nome}}</title>
 </head>
@@ -176,7 +180,8 @@
 		 <form method="POST" ng-submit="enviarComentario(comentario)">
 		   <div class="form-group">
 			  <label for="comment">Faça sua pergunta : </label>
-			  <textarea class="form-control" rows="5" id="comment" ng-model="comentario"></textarea>
+			  <textarea class="form-control" rows="5" id="comment" ng-model="comentario.texto"></textarea>
+			  <div vc-recaptcha theme="light" ng-model="comentario.key" key="'6LeY3AkUAAAAAFitx9EGFUu_BOhsyZKFXIPp_xmJ'"></div>
 			</div>
 		  	<button type="submit"class="btn btn-primary " style="float: right" >Enviar</button>
 		</form>

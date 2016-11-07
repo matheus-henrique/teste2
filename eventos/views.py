@@ -16,6 +16,9 @@ from django.http import HttpResponseRedirect
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from django.http import HttpResponseRedirect
 import datetime
+import urllib.request as urllib2
+import json
+import urllib.request
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
@@ -29,7 +32,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import HttpResponse
-
+from django.conf import settings
 
 class Teste(APIView):
     throttle_classes = ()
@@ -44,9 +47,6 @@ class Teste(APIView):
         user = authenticate(username=request.data['username'], password=request.data['password'])
         login(request, user)
         return redirect('/perfil/')
-
-
-obtain_auth_token = Teste.as_view()
 
 
 
@@ -158,6 +158,22 @@ class ListaDeEventos(generics.ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.erros, status=status.HTTP_400_BAD_REQUEST)
 
+
+def verificarCaptcha(captcharesponse):
+    url = "https://www.google.com/recaptcha/api/siteverify"
+    values = {
+        'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        'response': captcharesponse
+        }
+    data = urllib.parse.urlencode(values)
+    binary_data = data.encode('utf-8') 
+    req = urllib2.Request(url, binary_data)
+    response = urllib2.urlopen(req)
+    result = json.loads(response.read())
+    if not result["success"]:
+        print("Deu um erro mizeravi")
+    else:
+        print("CERTOOOOOOOOOOOOOOOOOOO")
     
 class EventoComentarios(APIView):
     def get_queryset(self,pk):
@@ -171,8 +187,14 @@ class EventoComentarios(APIView):
         return Response(serializer.data)
 
     def post(self,request,pk):
+        resposta = request.data['comentario']
         request.data['id_author'] = request.user.id
         request.data['data'] = datetime.now()
+        print(resposta['key'])
+        verificarCaptcha(resposta['key'])
+        request.data['comentario'] = resposta['texto']
+       
+        print(request.data)
         serializer = ComentarioEventosSerializers(data = request.data)
         if serializer.is_valid():
             serializer.save(evento=Eventos.objects.get(id=pk),id_author=request.user)
